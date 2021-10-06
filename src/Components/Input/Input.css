@@ -1,0 +1,14 @@
+.input-wrap {
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+}
+
+.search-users {
+  width: 35vw;
+  height: 5vw;
+  margin: 5vw 0vw;
+  border: 2px solid black;
+  font-size: 3rem;
+  text-align: center;
+}

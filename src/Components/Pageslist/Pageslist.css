@@ -1,0 +1,15 @@
+.carousel-of-pages {
+  display        : flex;
+  justify-content: flex-end;
+  margin-top     : 1rem;
+}
+
+.carousel-items {
+  width          : 2rem;
+  height         : 2rem;
+  border         : 1px solid black;
+  display        : flex;
+  justify-content: center;
+  align-items    : center;
+  cursor         : pointer;
+}

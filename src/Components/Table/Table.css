@@ -1,0 +1,32 @@
+table,
+tr th,
+tr td {
+  border         : 1px solid black;
+  border-collapse: collapse;
+  height         : 2vw;
+  text-align     : center;
+}
+
+.user-data {
+  border: 2px solid black;
+}
+
+.inactive {
+  border: 1px solid black;
+}
+
+.carousel-of-pages {
+  display        : flex;
+  justify-content: flex-end;
+  margin-top     : 1rem;
+}
+
+.carousel-items {
+  width          : 2rem;
+  height         : 2rem;
+  border         : 1px solid black;
+  display        : flex;
+  justify-content: center;
+  align-items    : center;
+  cursor         : pointer;
+}

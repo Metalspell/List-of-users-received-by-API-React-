@@ -1,0 +1,7 @@
+.about-each-user {
+  border: 1px solid black;
+  margin-top: 6rem;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
