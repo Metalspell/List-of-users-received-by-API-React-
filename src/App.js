@@ -1,51 +1,43 @@
 import './App.css';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Input from './Components/Input/Input';
 import Table from './Components/Table/Table';
+import axios from "axios";
+import Output from './Components/Output/Output';
 
-const thTableData = [
-  { "text": "Id" },
-  { "text": "First name" },
-  { "text": "Last name" },
-  { "text": "Email" },
-  { "text": "Phone" },
-  { "text": "State" }
-];
+const App = () => {
 
-export default class App extends React.Component {
-  constructor() {
+  const thTableData = [
+    { "text": "Id" },
+    { "text": "First name" },
+    { "text": "Last name" },
+    { "text": "Email" },
+    { "text": "Phone" },
+    { "text": "State" }
+  ];
+  const [users, setusers] = useState([]);
 
-    super();
+  useEffect(() => {
+    fetchUsers()
+  }, []);
 
-    this.state = {
-      items: []
-    }
-  }
+  async function fetchUsers() {
+    try {
+      const response = await axios.get("https://itrex-react-lab-files.s3.eu-central-1.amazonaws.com/react-test-api.json");
+      setusers(response.data);
+    } catch (e) {
+      alert('Holy shit! No data about users!');
+    };
+  };
 
-  componentDidMount() {
-    fetch("https://itrex-react-lab-files.s3.eu-central-1.amazonaws.com/react-test-api.json")
-      .then(res => res.json())
-      .then(
-        (res) => {
-          this.setState({
-            items: res
-          })
-        },
-        (error) => {
-          this.setState({
-            error,
-            isLoaded: false
-          })
-        }
-      )
-  }
+  return (
+    <div className="general-container">
+      <Input />
+      <Table thNav={thTableData} apiData={users} />
+      <Output />
+    </div>
+  )
+};
 
-  render() {
-    return (
-      <div className="general-container">
-        <Input />
-        <Table thNav={thTableData} apiData={this.state.items}/>
-      </div>
-    )
-  }
-}
+export default App;
+

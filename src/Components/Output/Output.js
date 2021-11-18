@@ -1,24 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import './Output.css';
+import { useSelector } from 'react-redux';
+import { selectValue1, selectValue2 } from '../../Store/Reduxrepository';
 
-export default function Output(props) {
-  const [state, setstate] = useState([]);
-
-  useEffect(() => {
-    setstate(props.selRow);
-  })
+export default function Output() {
+  const oneUser = useSelector(selectValue1);
+  let nestArray = useSelector(selectValue2);
 
   return (
     <>
       <div className='about-each-user'>
-        {/* <h2>Profile info: </h2>
-        <p>Selected profile: <i>{state.firstName} {state.lastName}</i></p>
-        <p>Description: <i>{state.description}</i></p>
-        <p>Adress: <i>{state.adress.streetAddress}</i></p>
-        <p>City: <i>{state.adress.city}</i></p>
-        <p>State: <i>{state.adress.state}</i></p>
-        <p>Index: <i>{state.adress.zip}</i></p> */}
+        <h2>Profile info: </h2>
+        <ul>
+          <li>Selected profile: <i>{oneUser.firstName} {oneUser.lastName}</i></li>
+          <li>Phone: <i>{oneUser.phone}</i></li>
+          <li>Adress: <i>{nestArray.streetAddress}</i></li>
+          <li>City: <i>{nestArray.city}</i></li>
+          <li>State: <i>{nestArray.state}</i></li>
+          <li>Index: <i>{nestArray.zip}</i></li>
+        </ul>
       </div>
     </>
   );
-}
+};

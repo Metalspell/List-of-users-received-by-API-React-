@@ -1,40 +1,34 @@
 import './Table.css';
-import React from 'react';
-import Output from '../Output/Output';
+import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import {addSelectedRow, nestedArray} from '../../Store/Reduxrepository';
 
-const amountUsersPerPage = 20;
-let count = [];
+const Table = ({ apiData, thNav }) => {
+  const amountUsersPerPage = 10;
+  let count = [];
 
-export default class Table extends React.Component {
-  constructor(props) {
+  const dispatch = useDispatch();
+  
+  const [clicked, setclicked] = useState('');
+  const [amountOfPages, setamountOfPages] = useState([]);
+  // const [selectedRow, setselectedRow] = useState([]);
 
-    super(props);
-
-    this.state = {
-      s1: props.thNav,
-      users: props.apiData,
-      clicked: '',
-      selectedRow: [],
-      amountOfPages: [],
-      numberOfPage: 1,
-      prev: 0,
-      next: 20
-    }
-  }
-
-  componentDidMount() {
-    let amountOfPages = Math.ceil((this.state.users.length - 1) / amountUsersPerPage);
+  useEffect(() => {
+    let amountOfPages = Math.ceil((apiData.length - 1) / amountUsersPerPage);
     for (let i = 0; i < amountOfPages; i++) {
       count.push(i)
     }
-    this.setState({
-      amountOfPages: count
-    })
-  }
+    setamountOfPages(count);
+  }, []);
 
-  selectRow = (e) => {
-    const { id } = e.currentTarget;
-    this.setState({ clicked: id });
+  function selectRow (e) {
+    let selectedRow;
+    let id  = e.currentTarget.id;
+    setclicked(id);
+
+    selectedRow = apiData[id];
+    dispatch(addSelectedRow(selectedRow));
+    dispatch(nestedArray(selectedRow.adress));
 
     e = e || window.event;
     let data = [];
@@ -48,59 +42,41 @@ export default class Table extends React.Component {
         data.push(cells[i].innerHTML);
       }
     }
-    this.state.users.map((item) => {
-      if (data[0] == item.id) {
-        this.setState({
-          selectedRow: item
-        })
-      }
-    })
   }
 
-  render() {
-    const { clicked } = this.state;
-    const { users } = this.state;
-
-    let tableNav = this.state.s1.map((item, i) => {
-      return (
-        <th key={i}>{item.text}</th>
-      )
-    })
-
-    let usersList = users.map((item, index) => {
-      if (index < amountUsersPerPage) {
-        return (
-          <tr id={index} onClick={this.selectRow} className={clicked === `${index}` ? "user-data" : "inactive"}>
-            <td>{item.id}</td>
-            <td>{item.firstName}</td>
-            <td>{item.lastName}</td>
-            <td>{item.email}</td>
-            <td>{item.phone}</td>
-            <td>{item.adress.state}</td>
-          </tr>
-        )
-      }
-    })
-
+  let tableNav = thNav.map((item, i) => {
     return (
-      <>
-        <table>
-          <thead>
-            <tr>
-              {tableNav}
-            </tr>
-          </thead>
-          <tbody>
-            {usersList}
-          </tbody>
-        </table>
-        <div className="carousel-of-pages">
-          {count.map((items, i) => (
-            <div onClick={(e) => this.setState({ numberOfPage: +e.currentTarget.innerHTML })} className="carousel-items" key={i}>{i + 1}</div>
-          ))}
-        </div>
-        <Output selRow={this.state.selectedRow} />
-      </>
+      <th key={i}>{item.text}</th>
     )
-  }
+  })
+
+  let usersList = apiData.map((item, i) => {
+    if (i < amountUsersPerPage) {
+      return (
+        <tr key={i} id={i} onClick={selectRow} className={clicked === `${i}` ? "user-data" : "inactive"}>
+          <td>{item.id}</td>
+          <td>{item.firstName}</td>
+          <td>{item.lastName}</td>
+          <td>{item.email}</td>
+          <td>{item.phone}</td>
+          <td>{item.adress.state}</td>
+        </tr>
+      )
+    }
+  })
+
+  return (
+    <table>
+      <thead>
+        <tr>
+          {tableNav}
+        </tr>
+      </thead>
+      <tbody>
+        {usersList}
+      </tbody>
+    </table>
+  )
 }
+
+export default Table;
